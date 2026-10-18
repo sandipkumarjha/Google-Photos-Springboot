@@ -17,11 +17,15 @@ pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
-The API base URL defaults to `http://localhost:8080/api`. Override it with:
+The API base URL defaults to the deployed backend,
+`https://google-photos-springboot.onrender.com/api`. Point it at a local backend with:
 
 ```bash
-NEXT_PUBLIC_API_URL=https://your-api.example.com/api pnpm dev
+NEXT_PUBLIC_API_URL=http://localhost:8080 pnpm dev
 ```
+
+The value may be the backend origin or include `/api`; the client appends `/api` once.
+`NEXT_PUBLIC_*` variables are inlined at build time, so set it before `pnpm build`.
 
 Other scripts: `pnpm lint`, `pnpm build`, `pnpm start`.
 

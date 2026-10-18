@@ -47,10 +47,15 @@ public class SecurityConfig {
                         // Allow CORS preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Public authentication endpoints
+                        // Public authentication endpoints. Logout only revokes the
+                        // refresh token in its body, so it needs no access token.
+                        // GET /api/auth/me stays protected.
                         .requestMatchers(
-                                "/auth/**",
-                                "/api/auth/**"
+                                HttpMethod.POST,
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/refresh",
+                                "/api/auth/logout"
                         ).permitAll()
 
                         // Public health endpoint

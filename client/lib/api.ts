@@ -2,9 +2,21 @@
 import { useAlbumLockStore } from "@/stores/album-lock-store";
 import { useAuthStore } from "@/stores/auth-store";
 
-const API_URL =
+/**
+ * Every backend controller is mapped under `/api`. NEXT_PUBLIC_API_URL may be
+ * the backend origin (`https://host`) or already include the prefix
+ * (`https://host/api`); both resolve to the same base, so paths below never
+ * repeat `/api`.
+ */
+const BACKEND_ORIGIN = (
   process.env.NEXT_PUBLIC_API_URL ??
-  "https://google-photos-springboot.onrender.com";
+  "https://google-photos-springboot.onrender.com"
+)
+  .trim()
+  .replace(/\/+$/, "")
+  .replace(/\/api$/, "");
+
+export const API_URL = `${BACKEND_ORIGIN}/api`;
 
 export type User = {
   id: string;
@@ -276,7 +288,7 @@ async function refreshAccessToken(): Promise<string | null> {
 
     try {
       const response = await fetch(
-        `${API_URL}/api/auth/refresh`,
+        `${API_URL}/auth/refresh`,
         {
           method: "POST",
           headers: {
@@ -491,7 +503,7 @@ export const api = {
   }) =>
     normalizeAuthResponse(
       await request<AuthResponsePayload>(
-        "/api/auth/register",
+        "/auth/register",
         {
           method: "POST",
           body: JSON.stringify(body),
@@ -506,7 +518,7 @@ export const api = {
   }) =>
     normalizeAuthResponse(
       await request<AuthResponsePayload>(
-        "/api/auth/login",
+        "/auth/login",
         {
           method: "POST",
           body: JSON.stringify(body),
@@ -520,7 +532,7 @@ export const api = {
       useAuthStore.getState().refreshToken;
 
     return request<void>(
-      "/api/auth/logout",
+      "/auth/logout",
       {
         method: "POST",
         body: JSON.stringify({ refreshToken }),
@@ -529,7 +541,7 @@ export const api = {
     );
   },
 
-  me: () => request<User>("/api/auth/me"),
+  me: () => request<User>("/auth/me"),
 
   getPhoto: (photoId: string) =>
     request<Photo>(`/photos/${photoId}`),

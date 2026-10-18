@@ -1,6 +1,4 @@
-import { getValidAccessToken, type Photo } from "@/lib/api";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://google-photos-springboot.onrender.com";
+import { API_URL, getValidAccessToken, type Photo } from "@/lib/api";
 
 /** Mirrors the MIME types the backend's PhotoService accepts. */
 export const ACCEPTED_IMAGE_TYPES = [
